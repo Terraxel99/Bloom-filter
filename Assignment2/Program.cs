@@ -5,7 +5,14 @@ const int numberOfTestsForFalsePositive = 500;
 
 bool verbose = false;
 
-HandleArguments();
+try
+{
+    HandleArguments();
+}
+catch (Exception e)
+{
+    Console.WriteLine($"An error occured while parsing the arguments : {e.Message}");
+}
 
 void HandleArguments()
 {
@@ -19,8 +26,8 @@ void HandleArguments()
     int k, m, n;
 
     bool success = int.TryParse(args[1], out k);
-    success = int.TryParse(args[2], out m);
-    success = int.TryParse(args[3], out n);
+    success = int.TryParse(args[2], out m) && success;
+    success = int.TryParse(args[3], out n) && success;
 
     if (!success)
     {
@@ -76,7 +83,7 @@ void Testing(int k, int m, int n)
     // There are "numberOfTestsForFalsePositive" tests, where each consists of "testSetSize" test elements.
     // Probability is (falsePositives / (numberOfTestsForFalsePositive * testSetSize).
     float rate = (float)falsePositives / (numberOfTestsForFalsePositive * testSetSize);
-    Console.WriteLine($"There are {falsePositives} false positives for  tests");
+    Console.WriteLine($"\nThere were {falsePositives} false positives in total during the tests.");
     Console.WriteLine($"The false positive rate is : {rate}");
 }
 
