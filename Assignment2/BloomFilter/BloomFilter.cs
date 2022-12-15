@@ -34,7 +34,7 @@
             this.hashFunctions = new Func<T, int>[k];
 
             this.NumberOfHashFunctions = k;
-            this.hashFunctions = MurmurHashFactory.GenerateFunctions<T>(k);
+            this.hashFunctions = MurmurHashFactory.GenerateFunctions<T>(m, k);
 
             this.Initialize();
         }
@@ -55,7 +55,7 @@
             {
                 var hashed = hashFunction(element);
 
-                if (!this.BitArray[hashed % this.BitArray.Length])
+                if (!this.BitArray[hashed])
                 {
                     return false;
                 }
@@ -71,15 +71,10 @@
         /// <param name="element">The element to add.</param>
         public void Add(T element)
         {
-            /*for i ← 1 to n
-                for j ← 1 to k
-                    B[hj(xi)] ← 1
-            return B */
-
             for (int i = 0; i < this.NumberOfHashFunctions; i++)
             {
                 var hashed = this.hashFunctions.ElementAt(i)(element);
-                this.BitArray[hashed % this.BitArray.Length] = true;
+                this.BitArray[hashed] = true;
             }
         }
 

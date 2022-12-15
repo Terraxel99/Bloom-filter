@@ -11,14 +11,14 @@
         /// <typeparam name="T">The type of element to hash.</typeparam>
         /// <param name="amount">The amount of functions to generate.</param>
         /// <returns>A set of hash functions.</returns>
-        public static IEnumerable<Func<T, int>> GenerateFunctions<T>(int amount)
+        public static IEnumerable<Func<T, int>> GenerateFunctions<T>(int m, int amount)
         {
             var fns = new Func<T, int>[amount];
 
             for (int i = 0; i < amount; i++)
             {
                 int seed = i; // Need to copy for anonymous function to ensure different seeds.
-                fns[i] = (e) => MurmurHashFactory.Hash<T>(e, (uint) seed);       
+                fns[i] = (e) => MurmurHashFactory.Hash<T>(e, m, (uint) seed);       
             }
 
             return fns;
@@ -31,7 +31,7 @@
         /// <param name="element">The element to hash.</param>
         /// <param name="seed">The seed of the hash function.</param>
         /// <returns>The integer after mapping of the hash function.</returns>
-        private static int Hash<T>(T element, uint seed)
+        private static int Hash<T>(T element, int m, uint seed)
         {
             var factory = MurmurHash3Factory.Instance;
 
@@ -39,7 +39,7 @@
             var hash = murmur.ComputeHash(ObjectToByteArray(element)).Hash;
 
             // Ensure positive value with absolute value.
-            return Math.Abs(BitConverter.ToInt32(hash));
+            return Math.Abs(BitConverter.ToInt32(hash) % m);
         }
 
         /// <summary>
