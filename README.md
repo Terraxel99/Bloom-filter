@@ -3,13 +3,13 @@
 ***
 
 ## Contents
-1. [Introduction](#general-info)
+1. [Introduction](#intro)
 2. [Technologies](#technologies)
 3. [Content](#content)
 4. [Program usage](#usage)
 5. [Contributor](#contributor)
 
-<a name="Introduction"></a>
+<a name="intro"></a>
 
 ### Introduction
 
