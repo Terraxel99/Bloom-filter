@@ -3,6 +3,9 @@
     using System.Data.HashFunction.MurmurHash;
     using System.Runtime.Serialization.Formatters.Binary;
 
+    /// <summary>
+    /// Custom Murmur Hash Factory adapted to the needs of a bloom filter.
+    /// </summary>
     public static class MurmurHashFactory
     {
         /// <summary>

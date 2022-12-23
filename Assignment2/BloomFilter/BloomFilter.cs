@@ -17,6 +17,24 @@
         /// The number of hash functions.
         /// </summary>
         public int NumberOfHashFunctions { get; private set; }
+        
+        /// <summary>
+        /// The number of elements N.
+        /// </summary>
+        public int NumberElements { get; private set; }
+
+        /// <summary>
+        /// Gives the expected 
+        /// </summary>
+        public double ExpectedRate
+        {
+            get
+            {
+                var exponent = -(this.NumberElements * this.NumberOfHashFunctions) / (double)this.BitArray.Length;
+                var p = Math.Pow(Math.E, exponent);
+                return Math.Pow((1 - p), this.NumberOfHashFunctions);
+            }
+        }
 
         /// <summary>
         /// The hash functions.
@@ -30,6 +48,13 @@
         /// <param name="k">The number of hash functions that will be used.</param>
         public BloomFilter(int m, int k)
         {
+            if (m < 1 || k < 1)
+            {
+                throw new ArgumentException("Values of k and m should be stricly positive");
+            }
+
+            this.NumberElements++;
+
             this.BitArray = new bool[m];
             this.hashFunctions = new Func<T, int>[k];
 
@@ -76,6 +101,8 @@
                 var hashed = this.hashFunctions.ElementAt(i)(element);
                 this.BitArray[hashed] = true;
             }
+
+            this.NumberElements++;
         }
 
         /// <summary>

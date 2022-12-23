@@ -11,7 +11,7 @@ try
 }
 catch (Exception e)
 {
-    Console.WriteLine($"An error occured while parsing the arguments : {e.Message}");
+    Console.WriteLine($"An error occured while parsing the arguments : {e.Message}\n");
 }
 
 void HandleArguments()
@@ -20,7 +20,7 @@ void HandleArguments()
     
     if (args.Length < 4)
     {
-        throw new InvalidOperationException("There must be 3 arguments to use this program");
+        throw new InvalidOperationException("There must be 3 arguments to use this program.\n");
     }
 
     int k, m, n;
@@ -31,7 +31,7 @@ void HandleArguments()
 
     if (!success)
     {
-        throw new ArgumentException("Provided arguments are not valid.");
+        throw new ArgumentException("Provided arguments are not valid.\n");
     }
 
     if (args.Length > 4 && args[4] == "--verbose")
@@ -46,14 +46,13 @@ void HandleArguments()
         Console.WriteLine($"There will be {numberOfTestsForFalsePositive} iterations with {testSetSize} elements tested per iteration");
     }
 
-    Console.Write("\n");
-
     Testing(k, m, n);
 }
 
 void Testing(int k, int m, int n)
 {
     int falsePositives = 0;
+    double expectedRate = 0;
 
     for (int nbTest = 1; nbTest <= numberOfTestsForFalsePositive; nbTest++)
     {
@@ -63,6 +62,8 @@ void Testing(int k, int m, int n)
         var elementsInStructure = GenerateRandomNumbers(n);
         var elementsOutStructure = GenerateRandomNumbers(n: testSetSize, exclusionList: elementsInStructure);
         bloomFilter.AddRange(elementsInStructure); // Creating structure with some elements in it.
+
+        expectedRate = bloomFilter.ExpectedRate;
 
         foreach (var element in elementsOutStructure)
         {
@@ -83,8 +84,9 @@ void Testing(int k, int m, int n)
     // There are "numberOfTestsForFalsePositive" tests, where each consists of "testSetSize" test elements.
     // Probability is (falsePositives / (numberOfTestsForFalsePositive * testSetSize).
     float rate = (float)falsePositives / (numberOfTestsForFalsePositive * testSetSize);
-    Console.WriteLine($"\nThere were {falsePositives} false positives in total during the tests.");
+    Console.WriteLine($"There were {falsePositives} false positives in total during the tests.");
     Console.WriteLine($"The false positive rate is : {rate}");
+    Console.WriteLine($"The expected rate was : {expectedRate}\n");
 }
 
 static IEnumerable<int> GenerateRandomNumbers(int n, IEnumerable<int> exclusionList = null)
